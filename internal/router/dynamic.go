@@ -83,7 +83,10 @@ func WriteSite(s site.Site, crt, key, home string) error {
 }
 
 func RenderDefaultCert(crt, key string) []byte {
-	doc := m{"tls": m{"stores": m{"default": m{"defaultCertificate": m{"certFile": crt, "keyFile": key}}}}}
+	doc := m{"tls": m{
+		"options": m{"default": m{"alpnProtocols": []string{"http/1.1"}}},
+		"stores":  m{"default": m{"defaultCertificate": m{"certFile": crt, "keyFile": key}}},
+	}}
 	out, _ := yaml.Marshal(doc)
 	return out
 }
